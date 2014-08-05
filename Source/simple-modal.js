@@ -155,12 +155,15 @@ SimpleModal.prototype = {
    */
   _drawWindow:function(options) {
     // Add Node in DOM
-    var node = $("<div>").addClass('simple-modal').attr('id', 'simple-modal');
+    var node = new Element("div", {
+      "class" : 'simple-modal',
+      'id': 'simple-modal'
+    });
 
     // Set Contents
-    node.html(this._template(self.options.template, {"_TITLE_":options.title || "Untitled", "_CONTENTS_":options.contents || ""}));
+    node.update(this._template(this.options.template, {"_TITLE_":options.title || "Untitled", "_CONTENTS_":options.contents || ""}));
 
-    $('body').append(node);
+    $$('body')[0].insert(node);
 
     // Add all buttons
     this._injectAllButtons();
@@ -179,10 +182,12 @@ SimpleModal.prototype = {
    * @return node HTML
    */
   addButton: function(label, classe, clickEvent) {
-    var bt = $('<a>').attr({
+    var bt = new Element("a", {
       "title" : label,
       "class" : classe
-    }).click(clickEvent ? function(e) { clickEvent.call(self, e); } : self.hideModal).text(label);
+    });
+    bt.update(label);
+    bt.observe('click', clickEvent ? function(e) { clickEvent.call(self, e); } : self.hideModal);
 
     this.buttons.push(bt);
     return this;
@@ -221,10 +226,10 @@ SimpleModal.prototype = {
    * @return
    */
   _overlay: function(status) {
+    self = this;
     switch(status) {
       case 'show':
         var overlay = new Element("div", {id: "simple-modal-overlay"});
-        console.log(overlay);
         overlay.setStyle({"background-color": this.options.overlayColor, "opacity": 0});
 
         $$('body')[0].insert(overlay);
@@ -243,8 +248,8 @@ SimpleModal.prototype = {
 
       case 'hide':
         // Remove Overlay
-        $('#simple-modal-overlay').remove();
-        $('#simple-modal').remove();
+        $('simple-modal-overlay').remove();
+        $('simple-modal').remove();
         Event.stopObserving(window, 'resize', self._display);
         Event.stopObserving(document, 'resize', self._escape);
     }
