@@ -87,52 +87,52 @@ SimpleModal.prototype = {
     }
     if (node) {
       // Custom size Modal
-      node.css('width', this.options.width);
+      node.setStyle('width', this.options.width);
 
       // Hide Header &&/|| Footer
-      if (this.options.hideHeader) node.addClass("hide-header");
-      if (this.options.hideFooter) node.addClass("hide-footer");
+      if (this.options.hideHeader) node.addClassName("hide-header");
+      if (this.options.hideFooter) node.addClassName("hide-footer");
 
       // Add Button X
       if (this.options.closeButton) this._addCloseButton();
 
       // Enabled Drag Window
       if (this.options.draggable) {
-        var headDrag = node.find('.simple-modal-header'), clicked = false, dx=0, dy=0;
-        var updatePos = function(pos) {
-          node.css({left: pos.x-dx, top: pos.y-dy});
-        };
-        var getMousePos = function(e) {
-          return { 'x': e.pageX, 'y': e.pageY };
-        };
-        headDrag.bind({
-          mousedown: function(e) {
-            var mpos = getMousePos(e), cpos = node.position();
-
-            e.stopPropagation();
-            e.preventDefault();
-
-            dx = mpos.x - cpos.left;
-            dy = mpos.y - cpos.top;
-
-            clicked = true;
-          },
-          mouseup: function(e) {
-            e.stopPropagation();
-            e.preventDefault();
-            clicked = false;
-          }
-        });
-        $(document).mousemove(function(e) {
-          e.stopPropagation();
-          e.preventDefault();
-          if (clicked)
-            updatePos(getMousePos(e));
-        });
-
-        // Set handle cursor
-        headDrag.css("cursor", "move");
-        node.addClass("draggable");
+//         var headDrag = node.down('.simple-modal-header'), clicked = false, dx=0, dy=0;
+//         var updatePos = function(pos) {
+//           node.css({left: pos.x-dx, top: pos.y-dy});
+//         };
+//         var getMousePos = function(e) {
+//           return { 'x': e.pageX, 'y': e.pageY };
+//         };
+//         headDrag.bind({
+//           mousedown: function(e) {
+//             var mpos = getMousePos(e), cpos = node.position();
+//
+//             e.stopPropagation();
+//             e.preventDefault();
+//
+//             dx = mpos.x - cpos.left;
+//             dy = mpos.y - cpos.top;
+//
+//             clicked = true;
+//           },
+//           mouseup: function(e) {
+//             e.stopPropagation();
+//             e.preventDefault();
+//             clicked = false;
+//           }
+//         });
+//         $(document).mousemove(function(e) {
+//           e.stopPropagation();
+//           e.preventDefault();
+//           if (clicked)
+//             updatePos(getMousePos(e));
+//         });
+//
+//         // Set handle cursor
+//         headDrag.css("cursor", "move");
+//         node.addClass("draggable");
       }
       // Resize Stage
       this._display();
@@ -145,7 +145,7 @@ SimpleModal.prototype = {
    * return
    */
   hideModal: function() {
-    self._overlay('hide');
+    this._overlay('hide');
   },
 
   /**
@@ -182,12 +182,13 @@ SimpleModal.prototype = {
    * @return node HTML
    */
   addButton: function(label, classe, clickEvent) {
+    var self = this;
     var bt = new Element("a", {
       "title" : label,
       "class" : classe
     });
     bt.update(label);
-    bt.observe('click', clickEvent ? function(e) { clickEvent.call(self, e); } : self.hideModal);
+    bt.observe('click', clickEvent ? function(e) { clickEvent.call(self, e); } : function() { self.hideModal(); });
 
     this.buttons.push(bt);
     return this;
@@ -199,10 +200,10 @@ SimpleModal.prototype = {
    * @return
    */
   _injectAllButtons: function() {
-    var footer = $("#simple-modal").find(".simple-modal-footer");
+    var footer = $$("#simple-modal .simple-modal-footer")[0];
 
-    $.each(self.buttons, function(i, e) {
-      footer.append(e);
+    this.buttons.forEach(function(e) {
+      footer.insert(e);
     });
   },
 
@@ -212,11 +213,18 @@ SimpleModal.prototype = {
    * @return node HTML
    */
   _addCloseButton: function() {
-    var b = $("<a>").addClass('close').attr({"href": "#"}).text('x').click(function(e) {
-      self.hideModal();
-      e.preventDefault();
+    var self = this;
+    var b = new Element("a", {
+      "href" : '#',
+      "class" : 'close'
     });
-    $("#simple-modal").append(b);
+    b.update('x');
+    b.observe('click', function(e) {
+      self.hideModal();
+      Event.stop(e);
+    });
+
+    $("simple-modal").insert(b);
     return b;
   },
 
@@ -226,7 +234,7 @@ SimpleModal.prototype = {
    * @return
    */
   _overlay: function(status) {
-    self = this;
+    var self = this;
     switch(status) {
       case 'show':
         var overlay = new Element("div", {id: "simple-modal-overlay"});
@@ -319,13 +327,14 @@ SimpleModal.prototype = {
    */
   _display: function() {
     // Update overlay
-    $("#simple-modal-overlay").css({width: $(window).width(), height: $(window).height()});
+    var viewport = document.viewport.getDimensions();
+    $("simple-modal-overlay").setStyle(viewport);
 
     // Update position popup
-    var modal = $("#simple-modal"), top = self.options.offsetTop || ($(window).height() - modal.height())/2;
-    modal.css({
-      top: top,
-      left: (($(window).width() - modal.width())/2)
+    var modal = $("simple-modal");
+    modal.setStyle({
+      top: this.options.offsetTop || (viewport.height - modal.getHeight())/2,
+      left: (viewport.width - modal.getWidth())/2
     });
   },
 
