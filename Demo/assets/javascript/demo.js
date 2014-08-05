@@ -1,16 +1,14 @@
-/*
-* Mootools Simple Modal
-* Version 1.0
-* Copyright (c) 2011 Marco Dell'Anna - http://www.plasm.it
-*/
-$(document).ready(function() {
+Event.observe(window, 'load', loadSimplemodal, false);
+
+function loadSimplemodal() {
   /* Alert */
-  $('#alert').click(function() {
+  $('alert').observe('click', function() {
+    console.log("!");
     $.fn.SimpleModal({btn_ok: 'Alert button', title: 'Alert Modal Title', contents: 'Lorem ipsum dolor sit amet...'}).showModal();
   });
 
   /* Confirm */
-  $('#confirm').click(function() {
+  $('confirm').observe('click', function() {
     $.fn.SimpleModal({
         btn_ok: 'Confirm button',
         model: 'confirm',
@@ -23,7 +21,7 @@ $(document).ready(function() {
   });
 
   /* Modal */
-  $('#modal').click(function() {
+  $('modal').observe('click', function() {
     $.fn.SimpleModal({
         btn_ok: 'Confirm button',
         model: 'modal',
@@ -36,7 +34,7 @@ $(document).ready(function() {
   });
 
   /* Modal Ajax */
-  $('#modal-ajax').click(function() {
+  $('modal-ajax').observe('click', function() {
     $.fn.SimpleModal({
         btn_ok: 'Confirm button',
         width: 600,
@@ -48,21 +46,21 @@ $(document).ready(function() {
             onRequestFailure: function() { }
         }
     }).addButton('Confirm', 'btn primary', function() {
-		// Check
-		if( $('confirm-text').get('value') != "DELETE" ) {
-			$('confirm-delete-error').setStyle('display', 'block');
-		} else {
-			// Your code ...
-			this.hideModal();
-		}
+    // Check
+    if( $('confirm-text').get('value') != "DELETE" ) {
+      $('confirm-delete-error').setStyle('display', 'block');
+    } else {
+      // Your code ...
+      this.hideModal();
+    }
     }).addButton('Cancel', 'btn').showModal();
   });
 
   /* Modal Image */
-  $('#modal-image').click(function(e) {
+  $('modal-image').observe('click', function() {
      $.fn.SimpleModal({
           model: 'modal-ajax',
-		  title: 'Modal Lightbox',
+      title: 'Modal Lightbox',
           param: {
               url: 'assets/images/lightbox.jpg'
           }
@@ -70,7 +68,7 @@ $(document).ready(function() {
   });
 
   /* NO Header */
-  $('#alert-noheader').click(function(e) {
+  $('alert-noheader').observe('click', function() {
       $.fn.SimpleModal({
           hideHeader: true,
           closeButton: false,
@@ -82,7 +80,7 @@ $(document).ready(function() {
   });
 
   /* NO Footer */
-  $('#modal-nofooter').click(function(e) {
+  $('modal-nofooter').observe('click', function() {
       $.fn.SimpleModal({
           hideFooter: true,
           width: 710,
@@ -92,7 +90,7 @@ $(document).ready(function() {
         }).showModal();
   });
 
-  $("#example-eheh").click(function(e) {
+  $('example-eheh').observe('click', function() {
       $.fn.SimpleModal({
           btn_ok: 'Confirm button',
           overlayClick: false,
@@ -104,15 +102,15 @@ $(document).ready(function() {
           onAppend: function() {
               var item = $("#simple-modal .simple-modal-footer a");
               item.removeClass("primary").css({"background":"#824571","color": "#FFF" }).parent().addClass("align-left");
-	          item.bind("mouseenter", function() {
-	              var parent = $(this).parent();
-	              if (parent.hasClass("align-left")) {
-	                  parent.removeClass("align-left").addClass("align-right");
-	              } else {
-	                  parent.removeClass("align-right").addClass("align-left");
-	              }
-	          });
+            item.bind("mouseenter", function() {
+                var parent = $(this).parent();
+                if (parent.hasClass("align-left")) {
+                    parent.removeClass("align-left").addClass("align-right");
+                } else {
+                    parent.removeClass("align-right").addClass("align-left");
+                }
+            });
           }
       }).addButton("Click ME please!", "btn primary", function(){}).showModal();
   });
-});
+};
