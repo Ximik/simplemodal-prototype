@@ -3,8 +3,8 @@ Event.observe(window, 'load', loadSimplemodal, false);
 function loadSimplemodal() {
   /* Alert */
   $('alert').observe('click', function() {
-    console.log("!");
-    $.fn.SimpleModal({btn_ok: 'Alert button', title: 'Alert Modal Title', contents: 'Lorem ipsum dolor sit amet...'}).showModal();
+    var modal = new SimpleModal({btn_ok: 'Alert button', title: 'Alert Modal Title', contents: 'Lorem ipsum dolor sit amet...'});
+    modal.showModal();
   });
 
   /* Confirm */

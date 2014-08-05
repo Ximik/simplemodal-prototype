@@ -1,5 +1,5 @@
-var simplemodal = Class.create();
-simplemodal.prototype = {
+var SimpleModal = Class.create();
+SimpleModal.prototype = {
 
   //
   //  Setup the Variables
@@ -13,11 +13,11 @@ simplemodal.prototype = {
   //
   //  Initialize
   //
-  initialize: function(container, options) {
-    if (!$(container)) {
-      throw(container+" doesn't exist!");
-      return false;
-    }
+  initialize: function(options) {
+//     if (!$(container)) {
+//       throw(container+" doesn't exist!");
+//       return false;
+//     }
     this.buttons = [];
 
     this.options = Object.extend({
@@ -223,31 +223,30 @@ simplemodal.prototype = {
   _overlay: function(status) {
     switch(status) {
       case 'show':
-        var overlay = $("<div>")
-        .attr("id", "simple-modal-overlay")
-        .css({"background-color": this.options.overlayColor, "opacity": 0});
+        var overlay = new Element("div", {id: "simple-modal-overlay"});
+        console.log(overlay);
+        overlay.setStyle({"background-color": this.options.overlayColor, "opacity": 0});
 
-        $('body').append(overlay);
+        $$('body')[0].insert(overlay);
 
-        overlay.animate({opacity: this.options.overlayOpacity});
+        new Effect.Opacity(overlay, {from: 0.0, to: this.options.overlayOpacity});
 
         // Behaviour
         if (this.options.overlayClick) {
-          overlay.click(function(e) { self.hideModal(); });
+          overlay.observe('click', function() { self.hideModal(); });
         }
 
         // Add Control Resize
-        $(window).resize(self._display);
-        $(document).keyup(self._escape);
+        Event.observe(window, 'resize', self._display);
+        Event.observe(document, 'resize', self._escape);
         break;
 
       case 'hide':
         // Remove Overlay
         $('#simple-modal-overlay').remove();
         $('#simple-modal').remove();
-
-        $(window).unbind('resize', self._display);
-        $(document).unbind('keyup', self._escape);
+        Event.stopObserving(window, 'resize', self._display);
+        Event.stopObserving(document, 'resize', self._escape);
     }
   },
 
