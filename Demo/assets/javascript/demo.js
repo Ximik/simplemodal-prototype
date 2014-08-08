@@ -27,15 +27,18 @@ function loadSimplemodal() {
 
   /* Modal */
   $('modal').observe('click', function() {
-    $.fn.SimpleModal({
-        btn_ok: 'Confirm button',
-        model: 'modal',
-        title: 'Modal Window Title',
-        contents: '<p ><img style="text-align:center" src="assets/images/simpleModalSmallWhite.png" />Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>'
-    }).addButton('Confirm', 'btn primary', function() {
-        alert('Action confirm modal');
-        this.hideModal();
-    }).addButton('Cancel', 'btn').showModal();
+    var modal = new SimpleModal({
+      btn_ok: 'Confirm button',
+      model: 'modal',
+      title: 'Modal Window Title',
+      contents: '<p ><img style="text-align:center" src="assets/images/simpleModalSmallWhite.png" />Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>'
+    });
+    modal.addButton('Confirm', 'btn primary', function() {
+      alert('Action confirm modal');
+      this.hideModal();
+    });
+    modal.addButton('Cancel', 'btn');
+    modal.showModal();
   });
 
   /* Modal Ajax */
