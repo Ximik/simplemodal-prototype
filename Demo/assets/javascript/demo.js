@@ -56,8 +56,8 @@ function loadSimplemodal() {
     })
     modal.addButton('Confirm', 'btn primary', function() {
       // Check
-      if( $('confirm-text').get('value') != "DELETE" ) {
-        $('confirm-delete-error').setStyle('display', 'block');
+      if( $('confirm-text').value != "DELETE" ) {
+        $('confirm-delete-error').show();
       } else {
         // Your code ...
         this.hideModal();
