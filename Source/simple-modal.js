@@ -316,11 +316,12 @@ SimpleModal.prototype = {
       width: window.innerWidth || (window.document.documentElement.clientWidth || window.document.body.clientWidth),
       height: window.innerHeight || (window.document.documentElement.clientHeight || window.document.body.clientHeight)
     };
-    $("simple-modal-overlay").setStyle(viewport);
-
-    // Update position popup
+    var overlay = $("simple-modal-overlay");
     var modal = $("simple-modal");
-    modal.setStyle({
+
+    if (overlay) overlay.setStyle(viewport);
+
+    if (modal) modal.setStyle({
       top: this.options.offsetTop || (viewport.height - modal.getHeight())/2,
       left: (viewport.width - modal.getWidth())/2
     });

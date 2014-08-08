@@ -3,21 +3,26 @@ Event.observe(window, 'load', loadSimplemodal, false);
 function loadSimplemodal() {
   /* Alert */
   $('alert').observe('click', function() {
-    var modal = new SimpleModal({btn_ok: 'Alert button', title: 'Alert Modal Title', contents: 'Lorem ipsum dolor sit amet...'});
+    var modal = new SimpleModal({
+      btn_ok: 'Alert button',
+      title: 'Alert Modal Title',
+      contents: 'Lorem ipsum dolor sit amet...'
+    });
     modal.showModal();
   });
 
   /* Confirm */
   $('confirm').observe('click', function() {
-    $.fn.SimpleModal({
-        btn_ok: 'Confirm button',
-        model: 'confirm',
-        callback: function(){
-            alert('Action confirm!');
-        },
-        title: 'Confirm Modal Title',
-        contents: 'Lorem ipsum dolor sit amet...'
-    }).showModal();
+    var modal = new SimpleModal({
+      btn_ok: 'Confirm button',
+      model: 'confirm',
+      callback: function(){
+        alert('Action confirm!');
+      },
+      title: 'Confirm Modal Title',
+      contents: 'Lorem ipsum dolor sit amet...'
+    });
+    modal.showModal();
   });
 
   /* Modal */
