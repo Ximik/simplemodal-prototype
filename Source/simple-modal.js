@@ -52,6 +52,7 @@ SimpleModal.prototype = {
    */
   showModal: function() {
     var node = null;
+    var self = this;
 
     // Inserisce Overlay
     this._overlay("show");
@@ -250,16 +251,16 @@ SimpleModal.prototype = {
         }
 
         // Add Control Resize
-        Event.observe(window, 'resize', self._display);
-        Event.observe(document, 'resize', self._escape);
+        Event.observe(window, 'resize', function() { self._display(); });
+        Event.observe(document, 'resize', function() { self._escape(); });
         break;
 
       case 'hide':
         // Remove Overlay
         $('simple-modal-overlay').remove();
         $('simple-modal').remove();
-        Event.stopObserving(window, 'resize', self._display);
-        Event.stopObserving(document, 'resize', self._escape);
+        Event.stopObserving(window, 'resize', function() { self._display(); });
+        Event.stopObserving(document, 'resize', function() { self._escape(); });
     }
   },
 
@@ -273,6 +274,7 @@ SimpleModal.prototype = {
    * @return
    */
   _loadContents: function(param) {
+    var self = this;
     // Set Loading
     $('#simple-modal').addClass("loading");
     // Match image file
@@ -327,7 +329,10 @@ SimpleModal.prototype = {
    */
   _display: function() {
     // Update overlay
-    var viewport = document.viewport.getDimensions();
+    var viewport = {
+      width: window.innerWidth || (window.document.documentElement.clientWidth || window.document.body.clientWidth),
+      height: window.innerHeight || (window.document.documentElement.clientHeight || window.document.body.clientHeight)
+    };
     $("simple-modal-overlay").setStyle(viewport);
 
     // Update position popup
