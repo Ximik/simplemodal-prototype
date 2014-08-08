@@ -43,25 +43,27 @@ function loadSimplemodal() {
 
   /* Modal Ajax */
   $('modal-ajax').observe('click', function() {
-    $.fn.SimpleModal({
-        btn_ok: 'Confirm button',
-        width: 600,
-        model: 'modal-ajax',
-        title: 'Are you sure you want to delete this?',
-        param: {
-            url: 'ajax-content.html',
-            onRequestComplete: function() { },
-            onRequestFailure: function() { }
-        }
-    }).addButton('Confirm', 'btn primary', function() {
-    // Check
-    if( $('confirm-text').get('value') != "DELETE" ) {
-      $('confirm-delete-error').setStyle('display', 'block');
-    } else {
-      // Your code ...
-      this.hideModal();
-    }
-    }).addButton('Cancel', 'btn').showModal();
+    var modal = new SimpleModal({
+      btn_ok: 'Confirm button',
+      width: 600,
+      model: 'modal-ajax',
+      title: 'Are you sure you want to delete this?',
+      param: {
+        url: 'ajax-content.html',
+        onRequestComplete: function() { },
+        onRequestFailure: function() { }
+      }
+    })
+    modal.addButton('Confirm', 'btn primary', function() {
+      // Check
+      if( $('confirm-text').get('value') != "DELETE" ) {
+        $('confirm-delete-error').setStyle('display', 'block');
+      } else {
+        // Your code ...
+        this.hideModal();
+      }
+    })
+    modal.addButton('Cancel', 'btn').showModal();
   });
 
   /* Modal Image */

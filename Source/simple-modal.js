@@ -259,49 +259,63 @@ SimpleModal.prototype = {
   _loadContents: function(param) {
     var self = this;
     // Set Loading
-    $('#simple-modal').addClass("loading");
+    $('simple-modal').addClassName("loading");
     // Match image file
-    var re = new RegExp( /([^\/\\]+)\.(jpg|png|gif)$/i ), container = $('#simple-modal');
+    var re = new RegExp( /([^\/\\]+)\.(jpg|png|gif)$/i ), container = $('simple-modal');
     if (param.url.match(re)) {
       // Hide Header/Footer
-      container.addClass("hide-footer");
+      container.addClassName("hide-footer");
       // Remove All Event on Overlay
-      $("#simple-modal-overlay").unbind(); // Prevent Abort
+      $("simple-modal-overlay").stopObserving(); // Prevent Abort
       // Immagine
-      var image = $('<img>').attr('src', param.url)
-      .load(function() {
-        var content = container.removeClass("loading").find(".contents").empty().append($(this).css('opacity', 0));
-        var dw = container.width() - content.width(), dh = container.height() - content.height();
-        var width = $(this).width()+dw, height  = $(this).height()+dh;
+      var image = new Element("img", { 'src': param.url });
+      image.load(function() {
+        this.setStyle('opacity', 0);
+        var content = container.removeClassName("loading").down(".contents").update('').insert(this);
+        var dw = container.getWidth() - content.getWidth(), dh = container.getHeight() - content.getHeight();
+        var width = this.getWidth()+dw, height  = this.getHeight()+dh;
+        var viewport = this._viewport();
 
-        //self._display();
-        container.animate({
-          width: width,
-          height: height,
-          left: ($(window).width() - width)/2,
-                          top: ($(window).height() - height)/2
-        }, 200, function() {
-          image.animate({opacity: 1});
+        new Effect.Opacity(overlay, {from: 0.0, to: this.options.overlayOpacity});
+        container.morph({
+          style: {
+            width: width,
+            height: height,
+            left: (viewport.width() - width)/2,
+            top: (viewport.height() - height)/2
+          },
+          duration: 0.2,
+          afterFinish: function() {
+            new Effect.Opacity(image, {from: 0.0, to: 1});
+          }
         });
       });
     } else {
-      $('#simple-modal .contents').load(param.url, function(responseText, textStatus, XMLHttpRequest) {
-        var container = $(this).parent().parent().removeClass("loading");
-        if (textStatus !== 'success') {
-          container.find(".contents").html("loading failed");
-
-          if (param.onRequestFailure) {
-            param.onRequestFailure();
+      var contents = $('simple-modal').down('.contents');
+      var xmlhttp = new XMLHttpRequest();
+      try {
+        xmlhttp.open("GET", param.url);
+        xmlhttp.onreadystatechange = function() {
+          var container = contents.parentNode.parentNode.removeClassName("loading");
+          if (xmlhttp.readyState == 4) {
+            if (xmlhttp.status!=200 && xmlhttp.status!=0) {
+              contents.update("loading failed");
+              if (param.onRequestFailure) {
+                param.onRequestFailure();
+              }
+            } else {
+              contents.update(xmlhttp.responseText);
+              if (param.onRequestComplete) {
+                param.onRequestComplete();
+              }
+              self._display();
+            }
           }
         }
-        else
-        {
-          if (param.onRequestComplete) {
-            param.onRequestComplete();
-          }
-          self._display();
-        }
-      });
+        xmlhttp.send(null);
+      } catch (e) {
+        contents.update("loading failed");
+      }
     }
   },
 
@@ -312,10 +326,7 @@ SimpleModal.prototype = {
    */
   _display: function() {
     // Update overlay
-    var viewport = {
-      width: window.innerWidth || (window.document.documentElement.clientWidth || window.document.body.clientWidth),
-      height: window.innerHeight || (window.document.documentElement.clientHeight || window.document.body.clientHeight)
-    };
+    var viewport = this._viewport();
     var overlay = $("simple-modal-overlay");
     var modal = $("simple-modal");
 
@@ -337,5 +348,12 @@ SimpleModal.prototype = {
       s=s.replace(new RegExp('{'+p+'}','g'), d[p]);
     }
     return s;
+  },
+
+  _viewport: function () {
+    return {
+      width: window.innerWidth || (window.document.documentElement.clientWidth || window.document.body.clientWidth),
+      height: window.innerHeight || (window.document.documentElement.clientHeight || window.document.body.clientHeight)
+    };
   }
 };
