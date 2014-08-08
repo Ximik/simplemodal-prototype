@@ -1,4 +1,8 @@
 var SimpleModal = Class.create();
+
+if (typeof Effect == 'undefined')
+  throw("simple-modal.js requires including script.aculo.us' effects.js library!");
+
 SimpleModal.prototype = {
   //
   //  Initialize
