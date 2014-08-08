@@ -68,13 +68,14 @@ function loadSimplemodal() {
 
   /* Modal Image */
   $('modal-image').observe('click', function() {
-     $.fn.SimpleModal({
-          model: 'modal-ajax',
+    var modal = new SimpleModal({
+      model: 'modal-ajax',
       title: 'Modal Lightbox',
-          param: {
-              url: 'assets/images/lightbox.jpg'
-          }
-        }).showModal();
+      param: {
+        url: 'assets/images/lightbox.jpg'
+      }
+    });
+    modal.showModal();
   });
 
   /* NO Header */

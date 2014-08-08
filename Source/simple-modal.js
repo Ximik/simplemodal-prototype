@@ -269,20 +269,19 @@ SimpleModal.prototype = {
       $("simple-modal-overlay").stopObserving(); // Prevent Abort
       // Immagine
       var image = new Element("img", { 'src': param.url });
-      image.load(function() {
-        this.setStyle('opacity', 0);
-        var content = container.removeClassName("loading").down(".contents").update('').insert(this);
+      image.observe('load', function() {
+        image.setStyle({'opacity': 0});
+        var content = container.removeClassName("loading").down(".contents").update('').insert(image);
         var dw = container.getWidth() - content.getWidth(), dh = container.getHeight() - content.getHeight();
-        var width = this.getWidth()+dw, height  = this.getHeight()+dh;
-        var viewport = this._viewport();
+        var width = image.getWidth()+dw, height  = image.getHeight()+dh;
+        var viewport = self._viewport();
 
-        new Effect.Opacity(overlay, {from: 0.0, to: this.options.overlayOpacity});
-        container.morph({
+        new Effect.Morph(container, {
           style: {
-            width: width,
-            height: height,
-            left: (viewport.width() - width)/2,
-            top: (viewport.height() - height)/2
+            width: width + 'px',
+            height: height + 'px',
+            left: (viewport.width - width)/2 + 'px',
+            top: (viewport.height - height)/2 + 'px'
           },
           duration: 0.2,
           afterFinish: function() {
