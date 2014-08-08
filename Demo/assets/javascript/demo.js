@@ -91,15 +91,16 @@ function loadSimplemodal() {
     modal.showModal();
   });
 
-  /* NO Footer */
-  $('modal-nofooter').observe('click', function() {
-      $.fn.SimpleModal({
-          hideFooter: true,
-          width: 710,
-          title: 'Vimeo video',
-          model: 'modal',
-          contents: '<iframe src="http://player.vimeo.com/video/26198635?title=0&amp;byline=0&amp;portrait=0&amp;color=824571" width="680" height="382" frameborder="0" webkitAllowFullScreen allowFullScreen></iframe>'
-        }).showModal();
+  /* Modal Video */
+  $('modal-video').observe('click', function() {
+    var modal = new SimpleModal({
+      hideFooter: true,
+      width: 710,
+      title: 'Vimeo video',
+      model: 'modal',
+      contents: '<iframe src="http://player.vimeo.com/video/26198635?title=0&amp;byline=0&amp;portrait=0&amp;color=824571" width="680" height="382" frameborder="0" webkitAllowFullScreen allowFullScreen></iframe>'
+    });
+    modal.showModal();
   });
 
   $('example-eheh').observe('click', function() {
