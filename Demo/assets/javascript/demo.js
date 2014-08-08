@@ -104,26 +104,29 @@ function loadSimplemodal() {
   });
 
   $('example-eheh').observe('click', function() {
-      $.fn.SimpleModal({
-          btn_ok: 'Confirm button',
-          overlayClick: false,
-          width: 300,
-          model: 'modal',
-          title: 'Eh eh eh',
-          contents: '<p>Try clicking on the button \"Click ME please!\"</p>',
+    var modal = new SimpleModal({
+      btn_ok: 'Confirm button',
+      overlayClick: false,
+      width: 300,
+      model: 'modal',
+      title: 'Eh eh eh',
+      contents: '<p>Try clicking on the button \"Click ME please!\"</p>',
 
-          onAppend: function() {
-              var item = $("#simple-modal .simple-modal-footer a");
-              item.removeClass("primary").css({"background":"#824571","color": "#FFF" }).parent().addClass("align-left");
-            item.bind("mouseenter", function() {
-                var parent = $(this).parent();
-                if (parent.hasClass("align-left")) {
-                    parent.removeClass("align-left").addClass("align-right");
-                } else {
-                    parent.removeClass("align-right").addClass("align-left");
-                }
-            });
+      onAppend: function() {
+        var item = $("simple-modal").down(".simple-modal-footer a");
+        var parent = item.parentElement;
+        item.removeClassName("primary").setStyle({"background":"#824571","color": "#FFF" });
+        parent.addClassName("align-left");
+        item.observe("mouseenter", function() {
+          if (parent.hasClassName("align-left")) {
+            parent.removeClassName("align-left").addClassName("align-right");
+          } else {
+            parent.removeClassName("align-right").addClassName("align-left");
           }
-      }).addButton("Click ME please!", "btn primary", function(){}).showModal();
+        });
+      }
+    });
+    modal.addButton("Click ME please!", "btn primary", function(){})
+    modal.showModal();
   });
 };

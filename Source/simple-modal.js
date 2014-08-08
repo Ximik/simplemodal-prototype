@@ -147,7 +147,7 @@ SimpleModal.prototype = {
     // Set Contents
     node.update(this._template(this.options.template, {"_TITLE_":options.title || "Untitled", "_CONTENTS_":options.contents || ""}));
 
-    $$('body')[0].insert(node);
+    document.body.insert(node);
 
     // Add all buttons
     this._injectAllButtons();
@@ -224,7 +224,7 @@ SimpleModal.prototype = {
         var overlay = new Element("div", {id: "simple-modal-overlay"});
         overlay.setStyle({"background-color": this.options.overlayColor, "opacity": 0});
 
-        $$('body')[0].insert(overlay);
+        document.body.insert(overlay);
 
         new Effect.Opacity(overlay, {from: 0.0, to: this.options.overlayOpacity});
 
