@@ -1,23 +1,9 @@
 var SimpleModal = Class.create();
 SimpleModal.prototype = {
-
-  //
-  //  Setup the Variables
-  //
- /* showAccordion : null,
-  currentAccordion : null,
-  duration : null,
-  effects : [],
-  animating : false,*/
-
   //
   //  Initialize
   //
   initialize: function(options) {
-//     if (!$(container)) {
-//       throw(container+" doesn't exist!");
-//       return false;
-//     }
     this.buttons = [];
 
     this.options = Object.extend({
@@ -99,41 +85,34 @@ SimpleModal.prototype = {
 
       // Enabled Drag Window
       if (this.options.draggable) {
-//         var headDrag = node.down('.simple-modal-header'), clicked = false, dx=0, dy=0;
-//         var updatePos = function(pos) {
-//           node.css({left: pos.x-dx, top: pos.y-dy});
-//         };
-//         var getMousePos = function(e) {
-//           return { 'x': e.pageX, 'y': e.pageY };
-//         };
-//         headDrag.bind({
-//           mousedown: function(e) {
-//             var mpos = getMousePos(e), cpos = node.position();
-//
-//             e.stopPropagation();
-//             e.preventDefault();
-//
-//             dx = mpos.x - cpos.left;
-//             dy = mpos.y - cpos.top;
-//
-//             clicked = true;
-//           },
-//           mouseup: function(e) {
-//             e.stopPropagation();
-//             e.preventDefault();
-//             clicked = false;
-//           }
-//         });
-//         $(document).mousemove(function(e) {
-//           e.stopPropagation();
-//           e.preventDefault();
-//           if (clicked)
-//             updatePos(getMousePos(e));
-//         });
-//
-//         // Set handle cursor
-//         headDrag.css("cursor", "move");
-//         node.addClass("draggable");
+        var headDrag = node.down('.simple-modal-header'), clicked = false, dx=0, dy=0;
+        var updatePos = function(pos) {
+          node.setStyle({left: pos.x-dx, top: pos.y-dy});
+        };
+        var getMousePos = function(e) {
+          return { 'x': e.pageX, 'y': e.pageY };
+        };
+        headDrag.observe('mousedown', function (e) {
+          var mpos = getMousePos(e), cpos = node.cumulativeOffset();
+          Event.stop(e);
+
+          dx = mpos.x - cpos.left;
+          dy = mpos.y - cpos.top;
+
+          clicked = true;
+        });
+        headDrag.observe('mouseup', function (e) {
+          Event.stop(e);
+          clicked = false;
+        });
+        document.observe('mousemove', function (e) {
+          Event.stop(e);
+          if (clicked) updatePos(getMousePos(e));
+        });
+
+        // Set handle cursor
+        headDrag.setStyle("cursor", "move");
+        node.addClassName("draggable");
       }
       // Resize Stage
       this._display();
